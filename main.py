@@ -4,7 +4,7 @@ import logging
 from dotenv import  load_dotenv
 import os
 from datetime import datetime, timedelta
-
+from zoneinfo import ZoneInfo
 
 load_dotenv()
 token = os.getenv('DISCORD_TOKEN')
@@ -19,6 +19,7 @@ bot = commands.Bot(command_prefix='!', intents=intents)
 RIFT_TIMES = [14, 17, 20, 23]
 REMINDER_MINUTES = 5
 CHANNEL_ID = 1340060727230206076
+TIMEZONE = ZoneInfo("Europe/Paris")
 
 @bot.event
 async def on_ready():
@@ -40,9 +41,12 @@ async def rift(ctx):
     await ctx.send(f"🌌 La prochaine rift est à **{next_rift.strftime('%H:%M')}** (dans {hours}h {minutes}m).")
 
 def get_next_rift():
-    now = datetime.now()
+    now = datetime.now(TIMEZONE)  # ✅ l’heure actuelle sera en Europe/Paris
     today = now.date()
-    rift_datetimes = [datetime.combine(today, datetime.min.time()) + timedelta(hours=h) for h in RIFT_TIMES]
+    rift_datetimes = [
+        datetime.combine(today, datetime.min.time(), tzinfo=TIMEZONE) + timedelta(hours=h)
+        for h in RIFT_TIMES
+    ]
 
     for rift_time in rift_datetimes:
         if now < rift_time:
