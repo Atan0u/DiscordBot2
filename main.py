@@ -18,7 +18,7 @@ bot = commands.Bot(command_prefix='!', intents=intents)
 
 RIFT_TIMES = [14, 17, 20, 23]
 REMINDER_MINUTES = 5
-CHANNEL_ID = 1340060727230206076
+CHANNEL_ID = 1287398159152189450
 TIMEZONE = ZoneInfo("Europe/Paris")
 
 @bot.event
